@@ -31,75 +31,80 @@ int main()
     int type;
     double op2;
 
-    while((type=getop(s)) !=EOF){
-        switch (type)
-        {
-        case '0':
-            push(atof(s));
+     while ((type = getop (s)) != EOF) {
+        switch (type) {
+        case NUMBER:
+            push (atof(s));
             break;
         case '+':
-            push(pop()+pop());
+            push (pop() + pop());
             break;
         case '*':
-            push(pop()*pop());
+            push (pop() * pop());
+            break;
+        case '-':
+            op2 = pop();
+            push (pop() - op2);
+            break;
+        case '/':
+            op2 = pop();
+            if (op2 != 0.0)
+                push (pop() / op2);
+            else
+                printf("Error, zero divisor!\n");
             break;
         case '\n':
-            printf("\t%.8g\n",pop());
+            printf("\t%.8g\n", pop());
             break;
         default:
-            printf("error: unknown command %s\n", s);
+            printf("Error, unnoun command %s\n", s);
             break;
         }
     }
+
 
     return 0;
 }
 
 int getop(char s[])
 {
-    int i, c;
-    while((s[0]=c=getch())==' ' && c=='\t');
+    int c,i;
+    while((s[0]=c=getch())==' ' || c=='\t');
     s[1]='\0';
     i=0;
-    
     if(!isdigit(c) && c!='.' && c!='-')
     {
-        return c;
+        return c; /*не число*/
     }
 
-    if(c=='-')
-    {
-       if(isdigit(c=getch()) || c=='.')
-       {
-           s[++i]=c;
-       }
-       else
-       {
-           if(c!=EOF)
-           {
-              ungetch(c);
-           }           
+    if(c=='-'){
+        if(isdigit(c=getch()) || c=='.')
+        {
+           s[++i]=c; //отрицательное число
+        }
+        else{
+           if(c!=EOF) ungetch(c);
            return '-';
-       }
+        }
     }
 
     if(isdigit(c))
     {
-        while(isdigit(s[++i]=c=getch())); //накапливаю целую часть числа
-    }
-    
-    if(c=='.')
-    {
-        while (isdigit(s[++i]=c=getch())); //накапливаю дробную часть
+        while (isdigit((s[++i])=c=getch()));
     }
 
+    if(c=='.')
+    {
+        while (isdigit((s[++i])=c=getch()));
+    }
     s[i]='\0';
     if(c!=EOF){
         ungetch(c);
     }
-    return '0';
+
+    return NUMBER;
 }
-    
+
     
 
 void ungetch(int c){
@@ -117,7 +122,7 @@ int getch(void){
 //////////////////////////////////
 
 void push(double f){
-    if(sp<MAXVAL){
+    if(sp<MAXVAL-1){
         val[sp++]=f;
     }
     else{
