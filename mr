@@ -1,6 +1,0 @@
-mkdir release
-make compile_flags="-O3 -funroll-loops -fomit-frame-pointer" \
-    --directory=release \
-    --makefile=../Makefile
-
-    
