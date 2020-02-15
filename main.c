@@ -83,7 +83,7 @@ int getop(char s[]){
 ////////////////////////////////////////
 #define MAXBUF 100
 
-int buf[MAXBUF];
+char buf[MAXBUF];
 int bufp = 0;
 
 int getch(void){
